@@ -1,0 +1,30 @@
+{
+    "ModTitle": "Wilderness Overhaul",
+    "ModVersion": "0.2.0",
+    "ModAuthor": "Daniel87 & Macadaynu",
+    "DFUnity_Version": "0.14.3",
+    "ModDescription": "",
+    "GUID": "2beb90e5-de58-43cf-b61c-46652f5ecbe3",
+    "Files": [
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOStochasticChances.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/ContainerObject.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOTerrainNature.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOVegetationList.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Assets/Presets/RealGrass.json",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOVegetationChance.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOTerrainTexturing.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WOShootingStarController.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Images/firefly.png",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WODistanceChecker.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Materials/Firefly.mat",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WORandomMover.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/ExtensionMethods.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Scripts/WildernessOverhaulMod.cs",
+        "Assets/Game/Mods/WildernessOverhaul/Materials/ShootingStarTrail.mat",
+        "Assets/Game/Mods/WildernessOverhaul/Images/firefly.asset",
+        "Assets/Game/Mods/WildernessOverhaul/shootingstars.prefab",
+        "Assets/Game/Mods/WildernessOverhaul/WildernessOverhaul.dfmod.json",
+        "Assets/Game/Mods/WildernessOverhaul/modsettings.json",
+        "Assets/Game/Mods/WildernessOverhaul/firefly.prefab"
+    ]
+}
