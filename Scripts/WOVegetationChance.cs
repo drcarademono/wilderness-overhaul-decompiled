@@ -1,93 +1,112 @@
-// Warning: Some assembly references could not be resolved automatically. This might lead to incorrect decompilation of some parts,
-// for ex. property getter/setter access. To get optimal decompilation results, please manually add the missing references to the list of loaded assemblies.
-// WildernessOverhaul.WOVegetationChance
 using UnityEngine;
+using System.Collections.Generic; // Required for Dictionary
 using WildernessOverhaul;
 
 public class WOVegetationChance
 {
-	public float chanceOnDirt;
+    public float chanceOnDirt;
+    public float chanceOnGrass;
+    public float chanceOnStone;
 
-	public float chanceOnGrass;
+    // Dictionary to hold scalers for each climate case
+    private Dictionary<int, float> climateScalers;
 
-	public float chanceOnStone;
+    public WOVegetationChance(int rndSeed)
+    {
+        Random.seed = rndSeed;
+        InitializeClimateScalers();
+    }
 
-	public WOVegetationChance(int rndSeed)
-	{
-		Random.seed = rndSeed;
-	}
+    private void InitializeClimateScalers()
+    {
+        // Initialize the dictionary with default scalers for all climates you deal with
+        climateScalers = new Dictionary<int, float>
+        {
+            {231, 1.0f},
+            {226, 0.75f},
+            {224, 1.0f},
+            {225, 0.5f},
+            {232, 1.0f},
+            {230, 1.0f},
+            {228, 1.0f},
+            {227, 1.0f},
+            {229, 1.0f},
+        };
+    }
 
-	public void ChangeVegetationChances(float elevation, int climate)
-	{
-		switch (climate)
-		{
-		case 231:
-			if (elevation > 0.125f)
-			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.225f, 0.3f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.35f, 0.375f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.5f, 0.525f), 0f, 1f);
-			}
-			else if (elevation > 0.075f)
-			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.225f, 0.3f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.325f, 0.35f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.675f, 0.7f), 0f, 1f);
-			}
-			else if (elevation > 0.025f)
-			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.25f, 0.3f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.2f, 0.225f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.65f, 0.675f), 0f, 1f);
-			}
-			else
-			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.275f, 0.3f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.15f, 0.175f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.625f, 0.65f), 0f, 1f);
-			}
-			break;
-		case 226:
+    public void ChangeVegetationChances(float elevation, int climate)
+    {
+        float scaler = climateScalers.ContainsKey(climate) ? climateScalers[climate] : 1.0f;
+        
+        switch (climate)
+        {
+            case 231:
+                if (elevation > 0.125f)
+                {
+                    chanceOnGrass = Mathf.Clamp(Random.Range(0.225f, 0.3f) * scaler, 0f, 1f);
+                    chanceOnDirt = Mathf.Clamp(Random.Range(0.35f, 0.375f) * scaler, 0f, 1f);
+                    chanceOnStone = Mathf.Clamp(Random.Range(0.5f, 0.525f) * scaler, 0f, 1f);
+                }
+                else if (elevation > 0.075f)
+                {
+                    chanceOnGrass = Mathf.Clamp(Random.Range(0.225f, 0.3f) * scaler, 0f, 1f);
+                    chanceOnDirt = Mathf.Clamp(Random.Range(0.325f, 0.35f) * scaler, 0f, 1f);
+                    chanceOnStone = Mathf.Clamp(Random.Range(0.675f, 0.7f) * scaler, 0f, 1f);
+                }
+                else if (elevation > 0.025f)
+                {
+                    chanceOnGrass = Mathf.Clamp(Random.Range(0.25f, 0.3f) * scaler, 0f, 1f);
+                    chanceOnDirt = Mathf.Clamp(Random.Range(0.2f, 0.225f) * scaler, 0f, 1f);
+                    chanceOnStone = Mathf.Clamp(Random.Range(0.65f, 0.675f) * scaler, 0f, 1f);
+                }
+                else
+                {
+                    chanceOnGrass = Mathf.Clamp(Random.Range(0.275f, 0.3f) * scaler, 0f, 1f);
+                    chanceOnDirt = Mathf.Clamp(Random.Range(0.15f, 0.175f) * scaler, 0f, 1f);
+                    chanceOnStone = Mathf.Clamp(Random.Range(0.625f, 0.65f) * scaler, 0f, 1f);
+                }
+                break;
+            case 226:
 			if (elevation > WildernessOverhaulMod.instance.treeLine)
 			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.25f, 0.275f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.2f, 0.225f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.325f, 0.35f), 0f, 1f);
+				chanceOnGrass = Mathf.Clamp(Random.Range(0.25f, 0.275f) * scaler, 0f, 1f);
+				chanceOnDirt = Mathf.Clamp(Random.Range(0.2f, 0.225f) * scaler, 0f, 1f);
+				chanceOnStone = Mathf.Clamp(Random.Range(0.325f, 0.35f) * scaler, 0f, 1f);
 			}
 			else if (elevation > 0.6f)
 			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.275f, 0.3f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.375f, 0.4f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.275f, 0.3f), 0f, 1f);
+				chanceOnGrass = Mathf.Clamp(Random.Range(0.275f, 0.3f) * scaler, 0f, 1f);
+				chanceOnDirt = Mathf.Clamp(Random.Range(0.375f, 0.4f) * scaler, 0f, 1f);
+				chanceOnStone = Mathf.Clamp(Random.Range(0.275f, 0.3f) * scaler, 0f, 1f);
 			}
 			else if (elevation > 0.4f)
 			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.3f, 0.325f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.35f, 0.4f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.225f, 0.25f), 0f, 1f);
+				chanceOnGrass = Mathf.Clamp(Random.Range(0.3f, 0.325f) * scaler, 0f, 1f);
+				chanceOnDirt = Mathf.Clamp(Random.Range(0.35f, 0.4f) * scaler, 0f, 1f);
+				chanceOnStone = Mathf.Clamp(Random.Range(0.225f, 0.25f) * scaler, 0f, 1f);
 			}
 			else if (elevation > 0.2f)
 			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.325f, 0.375f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.35f, 0.375f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.175f, 0.2f), 0f, 1f);
+				chanceOnGrass = Mathf.Clamp(Random.Range(0.325f, 0.375f) * scaler, 0f, 1f);
+				chanceOnDirt = Mathf.Clamp(Random.Range(0.35f, 0.375f) * scaler, 0f, 1f);
+				chanceOnStone = Mathf.Clamp(Random.Range(0.175f, 0.2f) * scaler, 0f, 1f);
 			}
 			else
 			{
-				chanceOnGrass = Mathf.Clamp(Random.Range(0.375f, 0.4f), 0f, 1f);
-				chanceOnDirt = Mathf.Clamp(Random.Range(0.3f, 0.35f), 0f, 1f);
-				chanceOnStone = Mathf.Clamp(Random.Range(0.25f, 0.275f), 0f, 1f);
+				chanceOnGrass = Mathf.Clamp(Random.Range(0.375f, 0.4f) * scaler, 0f, 1f);
+				chanceOnDirt = Mathf.Clamp(Random.Range(0.3f, 0.35f) * scaler, 0f, 1f);
+				chanceOnStone = Mathf.Clamp(Random.Range(0.25f, 0.275f) * scaler, 0f, 1f);
 			}
 			break;
 		case 224:
-			chanceOnGrass = Mathf.Clamp(Random.Range(0.1f, 0.15f), 0f, 1f);
-			chanceOnDirt = Mathf.Clamp(Random.Range(0.1f, 0.15f), 0f, 1f);
-			chanceOnStone = Mathf.Clamp(Random.Range(0.05f, 0.1f), 0f, 1f);
+			chanceOnGrass = Mathf.Clamp(Random.Range(0.1f, 0.15f) * scaler, 0f, 1f);
+			chanceOnDirt = Mathf.Clamp(Random.Range(0.1f, 0.15f) * scaler, 0f, 1f);
+			chanceOnStone = Mathf.Clamp(Random.Range(0.05f, 0.1f) * scaler, 0f, 1f);
 			break;
 		case 225:
-			chanceOnGrass = Mathf.Clamp(Random.Range(0.05f, 0.25f), 0f, 1f);
-			chanceOnDirt = Mathf.Clamp(Random.Range(0.05f, 0.25f), 0f, 1f);
-			chanceOnStone = Mathf.Clamp(Random.Range(0.05f, 0.2f), 0f, 1f);
+			chanceOnGrass = Mathf.Clamp(Random.Range(0.05f, 0.25f) * scaler, 0f, 1f);
+			chanceOnDirt = Mathf.Clamp(Random.Range(0.05f, 0.25f) * scaler, 0f, 1f);
+			chanceOnStone = Mathf.Clamp(Random.Range(0.05f, 0.2f) * scaler, 0f, 1f);
 			break;
 		case 232:
 			chanceOnGrass = Random.Range(0.05f, 0.09f);

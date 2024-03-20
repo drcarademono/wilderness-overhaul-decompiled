@@ -52,6 +52,8 @@ public class WOTerrainNature : ITerrainNature
 
 	private const float slopeSinkRatio = 70f;
 
+    private int currentBillboardCount = 0;
+
 	public WOVegetationList vegetationList;
 
 	public WOVegetationChance vegetationChance;
@@ -353,7 +355,18 @@ public class WOTerrainNature : ITerrainNature
 			num2 = stochastics.rainforestForestLimit[1];
 			break;
 		case 225:
-			return;
+			num = GetNoise(latitude, longitude, stochastics.desertFrequency, stochastics.desertAmplitude, stochastics.desertPersistence, stochastics.desertOctaves, 100);
+			num = Mathf.Clamp(num, 0f, 1f);
+			billboardCollection = vegetationList.desertDeadTrees;
+			billboardCollection2 = vegetationList.desertCactus;
+			billboardCollection3 = vegetationList.desertDeadTrees;
+			billboardCollection4 = vegetationList.desertCactus;
+			billboardCollection5 = vegetationList.desertStones;
+			billboardCollection6 = vegetationList.desertCactus;
+			billboardCollection7 = vegetationList.desertStones;
+			limit = stochastics.rainforestForestLimit[0];
+			num2 = stochastics.rainforestForestLimit[1];
+			break;
 		case 229:
 			num = GetNoise(latitude, longitude, stochastics.subtropicalForestFrequency, stochastics.subtropicalForestAmplitude, stochastics.subtropicalForestPersistence, stochastics.subtropicalForestOctaves, 100);
 			num = Mathf.Clamp(num, 0f, 1f);
@@ -642,6 +655,13 @@ public class WOTerrainNature : ITerrainNature
 
 	public void AddBillboardToBatch(ContainerObject baseData, List<int> billboardCollection, float posVariance, bool checkOnLand)
 	{
+        // Check if adding another billboard would exceed the maximum batch size
+        //if (currentBillboardCount >= 16250)
+        //{
+            //Debug.Log("Wilderness Overhaul: Maximum batch size reached.");
+            //return;
+        //}
+
 		int index = (int)Mathf.Round(UnityEngine.Random.Range(0, billboardCollection.Count));
 		Vector3 vector = new Vector3(((float)baseData.x + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale, 0f, ((float)baseData.y + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale);
 		float num = baseData.terrain.SampleHeight(vector + baseData.terrain.transform.position);
@@ -651,6 +671,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[index], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[index], vector);
+                //currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -662,6 +683,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[index], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[index], vector);
+                //currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -679,6 +701,13 @@ public class WOTerrainNature : ITerrainNature
 
 	public void AddBillboardToBatch(ContainerObject baseData, List<int> billboardCollection, float posVariance, bool checkOnLand, int record)
 	{
+        // Check if adding another billboard would exceed the maximum batch size
+        //if (currentBillboardCount >= 16250)
+        //{
+            //Debug.Log("Wilderness Overhaul: Maximum batch size reached.");
+        //    return;
+        //}
+
 		Vector3 vector = new Vector3(((float)baseData.x + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale, 0f, ((float)baseData.y + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale);
 		float num = baseData.terrain.SampleHeight(vector + baseData.terrain.transform.position);
 		vector.y = num - baseData.steepness / 70f;
@@ -687,6 +716,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[record], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[record], vector);
+                //currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -698,6 +728,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[record], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[record], vector);
+                //currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
