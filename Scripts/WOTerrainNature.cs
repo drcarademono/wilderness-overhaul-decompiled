@@ -417,7 +417,7 @@ public class WOTerrainNature : ITerrainNature
 				{
 					if (UnityEngine.Random.Range(0, 100) < 50 && height > UnityEngine.Random.Range(0.1f, 0.15f) && climate == 231)
 					{
-						AddBillboardToBatch(baseData, billboardCollection, UnityEngine.Random.Range(0.75f, 1.5f), checkOnLand: true, 3);
+						AddBillboardToBatchRecord(baseData, billboardCollection, UnityEngine.Random.Range(0.75f, 1.5f), checkOnLand: true, 3);
 					}
 					else
 					{
@@ -560,7 +560,7 @@ public class WOTerrainNature : ITerrainNature
 					{
 						for (int j = 0; j < UnityEngine.Random.Range(0, 3); j++)
 						{
-							AddBillboardToBatch(baseData, billboardCollection, UnityEngine.Random.Range(0.75f, 1.5f), checkOnLand: true, 3);
+							AddBillboardToBatchRecord(baseData, billboardCollection, UnityEngine.Random.Range(0.75f, 1.5f), checkOnLand: true, 3);
 						}
 					}
 				}
@@ -699,7 +699,7 @@ public class WOTerrainNature : ITerrainNature
 		return Mathf.Max(a, b);
 	}
 
-	public void AddBillboardToBatch(ContainerObject baseData, List<int> billboardCollection, float posVariance, bool checkOnLand, int record)
+	public void AddBillboardToBatchRecord(ContainerObject baseData, List<int> billboardCollection, float posVariance, bool checkOnLand, int record)
 	{
         // Check if adding another billboard would exceed the maximum batch size
         //if (currentBillboardCount >= 16250)
@@ -841,7 +841,7 @@ public class WOTerrainNature : ITerrainNature
 		{
 			int num = (int)Mathf.Round(pos.x / baseData.scale);
 			int num2 = (int)Mathf.Round(pos.z / baseData.scale);
-			if (baseData.dfTerrain.MapData.tilemapSamples.In2DArrayBounds(num, num2))
+            if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num, num2))
 			{
 				int num3 = baseData.dfTerrain.MapData.tilemapSamples[num, num2] & 0x3F;
 				if (num3 != 0 && num3 != 4 && num3 != 5 && num3 != 6 && num3 != 7 && num3 != 8 && num3 != 19 && num3 != 20 && num3 != 21 && num3 != 22 && num3 != 23 && num3 != 29 && num3 != 30 && num3 != 31 && num3 != 32 && num3 != 33 && num3 != 34 && num3 != 35 && num3 != 36 && num3 != 37 && num3 != 38 && num3 != 40 && num3 != 41 && num3 != 43 && num3 != 44 && num3 != 48 && num3 != 49 && num3 != 50 && num3 != 60 && num3 != 61)
@@ -854,7 +854,7 @@ public class WOTerrainNature : ITerrainNature
 		{
 			int num = (int)Mathf.Round(pos.x / baseData.scale);
 			int num2 = (int)Mathf.Round(pos.z / baseData.scale);
-			if (baseData.dfTerrain.MapData.tilemapSamples.In2DArrayBounds(num, num2))
+            if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num, num2))
 			{
 				int num3 = baseData.dfTerrain.MapData.tilemapSamples[num, num2] & 0x3F;
 				if (num3 != 1 && num3 != 2 && num3 != 3)
@@ -881,7 +881,7 @@ public class WOTerrainNature : ITerrainNature
 					float num5 = 1f;
 					int num = (int)Mathf.Round(pos.x / baseData.scale + ((i == 1) ? num4 : num5));
 					int num2 = (int)Mathf.Round(pos.z / baseData.scale + ((j == 1) ? num4 : num5));
-					if (baseData.dfTerrain.MapData.tilemapSamples.In2DArrayBounds(num - i, num2 - j))
+            if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num - i, num2 - j))
 					{
 						int num3 = baseData.dfTerrain.MapData.tilemapSamples[num - i, num2 - j] & 0x3F;
 						if (num3 != 4 && num3 != 5 && num3 != 6 && num3 != 7 && num3 != 8 && num3 != 19 && num3 != 20 && num3 != 21 && num3 != 22 && num3 != 23 && num3 != 29 && num3 != 30 && num3 != 31 && num3 != 32 && num3 != 33 && num3 != 34 && num3 != 35 && num3 != 36 && num3 != 37 && num3 != 38 && num3 != 40 && num3 != 41 && num3 != 43 && num3 != 44 && num3 != 48 && num3 != 49 && num3 != 50 && num3 != 60 && num3 != 61)
@@ -912,7 +912,7 @@ public class WOTerrainNature : ITerrainNature
 					float num5 = -0.3f;
 					int num = (int)Mathf.Round(pos.x / baseData.scale + ((k == 1) ? num4 : num5));
 					int num2 = (int)Mathf.Round(pos.z / baseData.scale + ((l == 1) ? num4 : num5));
-					if (baseData.dfTerrain.MapData.tilemapSamples.In2DArrayBounds(num - k, num2 - l))
+                    if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num - k, num2 - l))
 					{
 						int num3 = baseData.dfTerrain.MapData.tilemapSamples[num - k, num2 - l] & 0x3F;
 						if (num3 != 46 && num3 != 47 && num3 != 55)

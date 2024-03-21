@@ -1,9 +1,10 @@
 {
     "ModTitle": "Wilderness Overhaul",
-    "ModVersion": "0.2.0",
+    "ModVersion": "0.3.0",
     "ModAuthor": "Daniel87 & Macadaynu",
-    "DFUnity_Version": "0.14.3",
-    "ModDescription": "",
+    "ContactInfo": "Lysandus' Tomb Discord server",
+    "DFUnity_Version": "1.0.0",
+    "ModDescription": "Overhauls the wilderness nature layout by introducing abundant forests, open fields, dense rainforests and barren deserts.",
     "GUID": "2beb90e5-de58-43cf-b61c-46652f5ecbe3",
     "Files": [
         "Assets/Game/Mods/WildernessOverhaul/Scripts/WOStochasticChances.cs",
