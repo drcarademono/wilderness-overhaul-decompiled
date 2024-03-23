@@ -22,7 +22,7 @@ public class WOTerrainNature : ITerrainNature
 
 	private static bool shootingStarsExist;
 
-	private static bool InterestingErodedTerrainEnabled;
+	private static bool WODTerrainEnabled;
 
 	private static float fireflyDistance;
 
@@ -70,7 +70,7 @@ public class WOTerrainNature : ITerrainNature
 
 	public bool NatureMeshUsed { get; protected set; }
 
-	public WOTerrainNature(Mod woMod, bool DMEnabled, bool ITEnabled, int rngSeed, bool dNClearance, bool vegInLoc, bool fireflies, bool shootingStars, float fireflyActivationDistance, float shootingStarsMin, float shootingStarsMax, float gNClearance, float nClearance1, float nClearance2, float nClearance3, float nClearance4, float nClearance5)
+	public WOTerrainNature(Mod woMod, bool DMEnabled, bool WODTEnabled, int rngSeed, bool dNClearance, bool vegInLoc, bool fireflies, bool shootingStars, float fireflyActivationDistance, float shootingStarsMin, float shootingStarsMax, float gNClearance, float nClearance1, float nClearance2, float nClearance3, float nClearance4, float nClearance5)
 	{
 		mod = woMod;
 		if (DMEnabled)
@@ -82,8 +82,8 @@ public class WOTerrainNature : ITerrainNature
 			new List<int>(new int[3] { 5, 13, 13 });
 		}
 		Debug.Log("Wilderness Overhaul: DREAM Sprites enabled: " + DMEnabled);
-		InterestingErodedTerrainEnabled = ITEnabled;
-		Debug.Log("Wilderness Overhaul: Interesting Eroded Terrain enabled: " + InterestingErodedTerrainEnabled);
+		WODTerrainEnabled = WODTEnabled;
+		Debug.Log("Wilderness Overhaul: World of Daggerfall - Terrain enabled: " + WODTerrainEnabled);
 		randomSeed = rngSeed;
 		UnityEngine.Random.seed = randomSeed;
 		Debug.Log("Wilderness Overhaul: Random Seed: " + rngSeed);
@@ -180,7 +180,7 @@ public class WOTerrainNature : ITerrainNature
 		float scale = terrainData.heightmapScale.x * (float)heightmapDimension / (float)num;
 		float maxTerrainHeight = DaggerfallUnity.Instance.TerrainSampler.MaxTerrainHeight;
 		_ = DaggerfallUnity.Instance.TerrainSampler.BeachElevation;
-		if (InterestingErodedTerrainEnabled)
+		if (WODTerrainEnabled)
 		{
 			maxTerrainHeight = 4890f;
 		}
@@ -351,8 +351,8 @@ public class WOTerrainNature : ITerrainNature
 			billboardCollection5 = vegetationList.desertFlowers;
 			billboardCollection6 = vegetationList.desertCactus;
 			billboardCollection7 = vegetationList.desertStones;
-			limit = stochastics.rainforestForestLimit[0];
-			num2 = stochastics.rainforestForestLimit[1];
+			limit = stochastics.desertForestLimit[0];
+			num2 = stochastics.desertForestLimit[1];
 			break;
 		case 225:
 			num = GetNoise(latitude, longitude, stochastics.desertFrequency, stochastics.desertAmplitude, stochastics.desertPersistence, stochastics.desertOctaves, 100);
@@ -364,8 +364,8 @@ public class WOTerrainNature : ITerrainNature
 			billboardCollection5 = vegetationList.desertStones;
 			billboardCollection6 = vegetationList.desertCactus;
 			billboardCollection7 = vegetationList.desertStones;
-			limit = stochastics.rainforestForestLimit[0];
-			num2 = stochastics.rainforestForestLimit[1];
+			limit = stochastics.desertForestLimit[0];
+			num2 = stochastics.desertForestLimit[1];
 			break;
 		case 229:
 			num = GetNoise(latitude, longitude, stochastics.subtropicalForestFrequency, stochastics.subtropicalForestAmplitude, stochastics.subtropicalForestPersistence, stochastics.subtropicalForestOctaves, 100);

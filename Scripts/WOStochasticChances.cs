@@ -185,8 +185,8 @@ public class WOStochasticChances
 		desert1GrassChance1 = Random.Range(0, 30);
 		desert2GrassChance2 = Random.Range(10, 15);
 		desert1GrassChance2 = Random.Range(30, 50);
-		desertForestLimit[0] = 0.3f;
-		desertForestLimit[1] = desertForestLimit[0] + 0.1f;
+		desertForestLimit[0] = 0.2f;
+		desertForestLimit[1] = desertForestLimit[0] + 0.3f;
 		desertFrequency = Random.Range(0.1f, 0.2f);
 		desertAmplitude = 0.5f;
 		desertPersistence = Random.Range(0.1f, 0.2f);

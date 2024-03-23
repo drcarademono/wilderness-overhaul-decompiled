@@ -1,6 +1,3 @@
-// Warning: Some assembly references could not be resolved automatically. This might lead to incorrect decompilation of some parts,
-// for ex. property getter/setter access. To get optimal decompilation results, please manually add the missing references to the list of loaded assemblies.
-// WildernessOverhaul.WOVegetationList
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -93,7 +90,7 @@ public class WOVegetationList
 
 	public List<int> rainforestPlants;
 
-	public List<int> rainforestBushes;
+	//public List<int> rainforestBushes;
 
 	public List<int> rainforestRocks;
 
@@ -221,7 +218,7 @@ public class WOVegetationList
 
 	public List<int> collectionHauntedWoodlandRocks = new List<int>(new int[8] { 1, 3, 4, 5, 6, 8, 10, 12 });
 
-	public List<int> collectionHauntedWoodlandTrees = new List<int>(new int[6] { 13, 13, 13, 15, 15, 15 });
+	public List<int> collectionHauntedWoodlandTrees = new List<int>(new int[8] { 13, 13, 15, 15, 16, 17, 18, 30 });
 
 	public List<int> collectionHauntedWoodlandDirtTrees = new List<int>(new int[4] { 18, 19, 20, 31 });
 
@@ -235,17 +232,17 @@ public class WOVegetationList
 
 	public List<int> collectionRainforestPlants = new List<int>(new int[6] { 2, 5, 10, 11, 23, 24 });
 
-	public List<int> collectionRainforestBushes = new List<int>(new int[4] { 3, 9, 16, 18 });
+	//public List<int> collectionRainforestBushes = new List<int>(new int[7] { 7, 8, 9, 28, 29, 31, 9 });
 
 	public List<int> collectionRainforestRocks = new List<int>(new int[5] { 1, 4, 17, 19, 25 });
 
-	public List<int> collectionRainforestTrees = new List<int>(new int[5] { 12, 13, 14, 15, 30 });
+	public List<int> collectionRainforestTrees = new List<int>(new int[8] { 3, 12, 13, 14, 15, 16, 18, 30 }); // Mix bushes into trees to reduce monoculture
 
 	public List<int> collectionRainforestBeach = new List<int>(new int[4] { 31, 11, 29, 17 });
 
 	public List<int> collectionSubTropicalFlowers = new List<int>(new int[2] { 25, 26 });
 
-	public List<int> collectionSubTropicalPlants = new List<int>(new int[6] { 7, 8, 9, 28, 29, 31 });
+	public List<int> collectionSubTropicalPlants = new List<int>(new int[7] { 7, 8, 9, 28, 29, 31, 9 });
 
 	public List<int> collectionSubTropicalMushroom = new List<int>(new int[1] { 22 });
 
@@ -267,7 +264,7 @@ public class WOVegetationList
 
 	public List<int> collectionSwampRocks = new List<int>(new int[6] { 3, 4, 5, 6, 10, 11 });
 
-	public List<int> collectionSwampTrees = new List<int>(new int[5] { 12, 13, 16, 17, 18 });
+	public List<int> collectionSwampTrees = new List<int>(new int[7] { 12, 13, 16, 17, 18, 24, 30});
 
 	public List<int> collectionSwampDeadTrees = new List<int>(new int[5] { 15, 19, 24, 25, 30 });
 
@@ -670,7 +667,7 @@ public class WOVegetationList
 		rainforestBeach = collectionRainforestBeach;
 		rainforestFlowers = collectionRainforestFlowers;
 		rainforestRocks = collectionRainforestRocks;
-		rainforestBushes = collectionRainforestBushes;
+		//rainforestBushes = collectionRainforestBushes;
 		rainforestPlants = collectionRainforestPlants;
 		subtropicalTrees = collectionSubTropicalTrees;
 		subtropicalBulbs = collectionSubTropicalBulbs;
@@ -680,7 +677,7 @@ public class WOVegetationList
 		subtropicalRocks = collectionSubTropicalRocks;
 		subtropicalMushroom = collectionSubTropicalMushroom;
 		subtropicalPlants = collectionSubTropicalPlants;
-		hauntedWoodlandTrees = new List<int> { 13, 13, 13, 13, 15, 16, 18, 30 };
+		hauntedWoodlandTrees = collectionHauntedWoodlandTrees;
 		hauntedWoodlandBones = collectionHauntedWoodlandBones;
 		hauntedWoodlandBeach = collectionHauntedWoodlandBeach;
 		hauntedWoodlandDeadTrees = collectionHauntedWoodlandDeadTrees;
