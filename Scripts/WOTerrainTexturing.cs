@@ -37,7 +37,7 @@ namespace WildernessOverhaul
         static float[] persistence = ScaleArray(new float[] {0.5f, 0.55f, 0.95f, 0.8f, 0.5f, 0.5f, 0.8f, 0.5f, 0.8f, 0.3f}, 1.0f);
         static int octaves = 5;
         static float[] upperWaterSpread = ScaleArray(new float[] {-1.0f, -1.0f, 0.0f, 0.0f, -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, 0.0f}, 1.0f);
-        static float[] lowerGrassSpread = ScaleArray(new float[] {0.4f, 0.35f, 0.45f, 0.35f, 0.4f, 0.1f, 0.35f, 0.45f, 0.55f, 0.35f}, 0.5f);
+        static float[] lowerGrassSpread = ScaleArray(new float[] {0.4f, 0.35f, 0.45f, 0.55f, 0.4f, 0.1f, 0.35f, 0.45f, 0.55f, 0.35f}, 0.5f);
         static float[] upperGrassSpread = ScaleArray(new float[] {0.5f, 0.5f, 0.95f, 0.95f, 0.5f, 0.95f, 0.95f, 0.95f, 0.95f, 0.95f}, 1.0f);
 
         // Method to scale arrays
