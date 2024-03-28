@@ -143,6 +143,23 @@
                 }
             ],
             "$version": "v1"
+        },
+        {
+            "Name": "Compatibility",
+            "Description": "Settings for other mods",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Min": -4.0,
+                    "Max": 4.0,
+                    "Value": 2.0,
+                    "Name": "WorldOfDaggerfallClearance",
+                    "Description": "Clearance for World of Daggerfall locations",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.SliderFloatKey"
+                }
+            ],
+            "$version": "v1"
         }
     ]
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DaggerfallConnect;
 using DaggerfallConnect.Arena2;
 using DaggerfallConnect.Utility;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Game.Questing;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
 using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop.Utility.AssetInjection;
@@ -24,6 +26,8 @@ public class WOTerrainNature : ITerrainNature
 
 	private static bool WODTerrainEnabled;
 
+	private static bool LLEnabled;
+
 	private static float fireflyDistance;
 
 	private static float shootingStarsMinimum;
@@ -42,6 +46,8 @@ public class WOTerrainNature : ITerrainNature
 
 	private static float natureClearance5;
 
+	private static float wodInstanceClearance;
+
 	private static Mod mod;
 
 	public float height;
@@ -52,7 +58,7 @@ public class WOTerrainNature : ITerrainNature
 
 	private const float slopeSinkRatio = 70f;
 
-    private int currentBillboardCount = 0;
+	private int currentBillboardCount = 0;
 
 	public WOVegetationList vegetationList;
 
@@ -70,7 +76,7 @@ public class WOTerrainNature : ITerrainNature
 
 	public bool NatureMeshUsed { get; protected set; }
 
-	public WOTerrainNature(Mod woMod, bool DMEnabled, bool WODTEnabled, int rngSeed, bool dNClearance, bool vegInLoc, bool fireflies, bool shootingStars, float fireflyActivationDistance, float shootingStarsMin, float shootingStarsMax, float gNClearance, float nClearance1, float nClearance2, float nClearance3, float nClearance4, float nClearance5)
+	public WOTerrainNature(Mod woMod, bool DMEnabled, bool WODTEnabled, bool LLModEnabled, int rngSeed, bool dNClearance, bool vegInLoc, bool fireflies, bool shootingStars, float fireflyActivationDistance, float shootingStarsMin, float shootingStarsMax, float gNClearance, float nClearance1, float nClearance2, float nClearance3, float nClearance4, float nClearance5, float WoDClearance)
 	{
 		mod = woMod;
 		if (DMEnabled)
@@ -83,6 +89,7 @@ public class WOTerrainNature : ITerrainNature
 		}
 		Debug.Log("Wilderness Overhaul: DREAM Sprites enabled: " + DMEnabled);
 		WODTerrainEnabled = WODTEnabled;
+		LLEnabled = LLModEnabled;
 		Debug.Log("Wilderness Overhaul: World of Daggerfall - Terrain enabled: " + WODTerrainEnabled);
 		randomSeed = rngSeed;
 		UnityEngine.Random.seed = randomSeed;
@@ -112,6 +119,7 @@ public class WOTerrainNature : ITerrainNature
 		Debug.Log("Wilderness Overhaul: Setting Nature Clearance 4: " + natureClearance4);
 		natureClearance5 = nClearance5;
 		Debug.Log("Wilderness Overhaul: Setting Nature Clearance 5: " + natureClearance5);
+		wodInstanceClearance = WoDClearance;
 		stochastics = new WOStochasticChances(randomSeed);
 		vegetationChance = new WOVegetationChance(randomSeed);
 		vegetationList = new WOVegetationList(randomSeed);
@@ -157,6 +165,29 @@ public class WOTerrainNature : ITerrainNature
 			locationRect.yMin -= generalNatureClearance;
 			locationRect.yMax += generalNatureClearance;
 		}
+
+		List<Rect> extraLocationRects = null;
+		if (LLEnabled)
+		{
+			Vector2Int worldCoord = new Vector2Int(dfTerrain.MapPixelX, dfTerrain.MapPixelY);
+			ModManager.Instance.SendModMessage("Location Loader", "getTerrainLocationInstanceRects", worldCoord, (message, data) =>
+			{
+				if (data != null)
+				{
+					extraLocationRects = (List<Rect>)data;
+					for (int i = 0; i < extraLocationRects.Count; ++i)
+					{
+						Rect newValue = extraLocationRects[i];
+						newValue.xMin -= wodInstanceClearance;
+						newValue.xMax += wodInstanceClearance;
+						newValue.yMin -= wodInstanceClearance;
+						newValue.yMax += wodInstanceClearance;
+						extraLocationRects[i] = newValue;
+					}
+				}
+			});
+		}
+
 		Terrain component = dfTerrain.gameObject.GetComponent<Terrain>();
 		if (!component)
 		{
@@ -206,6 +237,12 @@ public class WOTerrainNature : ITerrainNature
 				{
 					continue;
 				}
+
+				if (extraLocationRects != null && extraLocationRects.Any(r => r.Contains(zero)))
+				{
+					continue;
+				}
+
 				int num4 = dfTerrain.MapData.tilemapSamples[j, i] & 0x3F;
 				if (num4 == 2)
 				{
@@ -655,12 +692,12 @@ public class WOTerrainNature : ITerrainNature
 
 	public void AddBillboardToBatch(ContainerObject baseData, List<int> billboardCollection, float posVariance, bool checkOnLand)
 	{
-        // Check if adding another billboard would exceed the maximum batch size
-        //if (currentBillboardCount >= 16250)
-        //{
-            //Debug.Log("Wilderness Overhaul: Maximum batch size reached.");
-            //return;
-        //}
+		// Check if adding another billboard would exceed the maximum batch size
+		//if (currentBillboardCount >= 16250)
+		//{
+			//Debug.Log("Wilderness Overhaul: Maximum batch size reached.");
+			//return;
+		//}
 
 		int index = (int)Mathf.Round(UnityEngine.Random.Range(0, billboardCollection.Count));
 		Vector3 vector = new Vector3(((float)baseData.x + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale, 0f, ((float)baseData.y + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale);
@@ -671,7 +708,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[index], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[index], vector);
-                //currentBillboardCount++;
+				//currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -683,7 +720,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[index], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[index], vector);
-                //currentBillboardCount++;
+				//currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -701,12 +738,12 @@ public class WOTerrainNature : ITerrainNature
 
 	public void AddBillboardToBatchRecord(ContainerObject baseData, List<int> billboardCollection, float posVariance, bool checkOnLand, int record)
 	{
-        // Check if adding another billboard would exceed the maximum batch size
-        //if (currentBillboardCount >= 16250)
-        //{
-            //Debug.Log("Wilderness Overhaul: Maximum batch size reached.");
-        //    return;
-        //}
+		// Check if adding another billboard would exceed the maximum batch size
+		//if (currentBillboardCount >= 16250)
+		//{
+			//Debug.Log("Wilderness Overhaul: Maximum batch size reached.");
+		//	return;
+		//}
 
 		Vector3 vector = new Vector3(((float)baseData.x + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale, 0f, ((float)baseData.y + UnityEngine.Random.Range(0f - posVariance, posVariance)) * baseData.scale);
 		float num = baseData.terrain.SampleHeight(vector + baseData.terrain.transform.position);
@@ -716,7 +753,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[record], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[record], vector);
-                //currentBillboardCount++;
+				//currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -728,7 +765,7 @@ public class WOTerrainNature : ITerrainNature
 			if (TerrainDistance > 1 || !ImportWONatureGameObject(baseData.dfBillboardBatch.TextureArchive, billboardCollection[record], baseData.terrain, baseData.x, baseData.y))
 			{
 				baseData.dfBillboardBatch.AddItem(billboardCollection[record], vector);
-                //currentBillboardCount++;
+				//currentBillboardCount++;
 			}
 			else if (!NatureMeshUsed)
 			{
@@ -841,7 +878,7 @@ public class WOTerrainNature : ITerrainNature
 		{
 			int num = (int)Mathf.Round(pos.x / baseData.scale);
 			int num2 = (int)Mathf.Round(pos.z / baseData.scale);
-            if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num, num2))
+			if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num, num2))
 			{
 				int num3 = baseData.dfTerrain.MapData.tilemapSamples[num, num2] & 0x3F;
 				if (num3 != 0 && num3 != 4 && num3 != 5 && num3 != 6 && num3 != 7 && num3 != 8 && num3 != 19 && num3 != 20 && num3 != 21 && num3 != 22 && num3 != 23 && num3 != 29 && num3 != 30 && num3 != 31 && num3 != 32 && num3 != 33 && num3 != 34 && num3 != 35 && num3 != 36 && num3 != 37 && num3 != 38 && num3 != 40 && num3 != 41 && num3 != 43 && num3 != 44 && num3 != 48 && num3 != 49 && num3 != 50 && num3 != 60 && num3 != 61)
@@ -854,7 +891,7 @@ public class WOTerrainNature : ITerrainNature
 		{
 			int num = (int)Mathf.Round(pos.x / baseData.scale);
 			int num2 = (int)Mathf.Round(pos.z / baseData.scale);
-            if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num, num2))
+			if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num, num2))
 			{
 				int num3 = baseData.dfTerrain.MapData.tilemapSamples[num, num2] & 0x3F;
 				if (num3 != 1 && num3 != 2 && num3 != 3)
@@ -881,7 +918,7 @@ public class WOTerrainNature : ITerrainNature
 					float num5 = 1f;
 					int num = (int)Mathf.Round(pos.x / baseData.scale + ((i == 1) ? num4 : num5));
 					int num2 = (int)Mathf.Round(pos.z / baseData.scale + ((j == 1) ? num4 : num5));
-            if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num - i, num2 - j))
+					if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num - i, num2 - j))
 					{
 						int num3 = baseData.dfTerrain.MapData.tilemapSamples[num - i, num2 - j] & 0x3F;
 						if (num3 != 4 && num3 != 5 && num3 != 6 && num3 != 7 && num3 != 8 && num3 != 19 && num3 != 20 && num3 != 21 && num3 != 22 && num3 != 23 && num3 != 29 && num3 != 30 && num3 != 31 && num3 != 32 && num3 != 33 && num3 != 34 && num3 != 35 && num3 != 36 && num3 != 37 && num3 != 38 && num3 != 40 && num3 != 41 && num3 != 43 && num3 != 44 && num3 != 48 && num3 != 49 && num3 != 50 && num3 != 60 && num3 != 61)
@@ -912,7 +949,7 @@ public class WOTerrainNature : ITerrainNature
 					float num5 = -0.3f;
 					int num = (int)Mathf.Round(pos.x / baseData.scale + ((k == 1) ? num4 : num5));
 					int num2 = (int)Mathf.Round(pos.z / baseData.scale + ((l == 1) ? num4 : num5));
-                    if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num - k, num2 - l))
+					if (ExtensionMethods.In2DArrayBounds(baseData.dfTerrain.MapData.tilemapSamples, num - k, num2 - l))
 					{
 						int num3 = baseData.dfTerrain.MapData.tilemapSamples[num - k, num2 - l] & 0x3F;
 						if (num3 != 46 && num3 != 47 && num3 != 55)

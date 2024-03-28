@@ -39,6 +39,10 @@ public class WildernessOverhaulMod : MonoBehaviour
 
 	private static bool WODTerrainModEnabled;
 
+	private static Mod LLMod;
+
+	private static bool LLModEnabled;
+
 	private static Mod BasicRoadsMod;
 
 	private static bool BasicRoadsModEnabled;
@@ -75,6 +79,8 @@ public class WildernessOverhaulMod : MonoBehaviour
 
 	private float natureClearance5;
 
+	private float wodClearance;
+
 	[Invoke(StateManager.StateTypes.Start, 0)]
 	public static void Init(InitParams initParams)
 	{
@@ -91,6 +97,12 @@ public class WildernessOverhaulMod : MonoBehaviour
 		{
 			WODTerrainModEnabled = true;
 			Debug.Log("Wilderness Overhaul: World of Daggerfall - Terrain Mod is active");
+		}
+		LLMod = ModManager.Instance.GetModFromGUID("fc5c0fa6-e80d-4cb1-89fa-c10be8e35bf3");
+		if (LLMod != null && LLMod.Enabled)
+		{
+			LLModEnabled = true;
+			Debug.Log("Wilderness Overhaul: Location Loader Mod is active");
 		}
 		BasicRoadsMod = ModManager.Instance.GetModFromGUID("566ab21a-22d8-4eea-8ccd-6cb8f7a7ed25");
 		if (BasicRoadsMod != null && BasicRoadsMod.Enabled)
@@ -117,7 +129,8 @@ public class WildernessOverhaulMod : MonoBehaviour
 		natureClearance3 = settings.GetValue<float>("DynamicNatureClearance", "Villages,Homes(Wealthy),ReligiousCults");
 		natureClearance4 = settings.GetValue<float>("DynamicNatureClearance", "Farms,Taverns,Temples,Homes(Poor)");
 		natureClearance5 = settings.GetValue<float>("DynamicNatureClearance", "Dungeons(Laybinths,Keeps,Ruins,Graveyards,Covens)");
-		woNature = new WOTerrainNature(mod, DREAMModEnabled, WODTerrainModEnabled, rngSeed, dynamicVegetationClearance, vegInLoc: false, fireflies, shootingStars, fireflyActivationDistance, shootingStarsMin, shootingStarsMax, generalNatureClearance, natureClearance1, natureClearance2, natureClearance3, natureClearance4, natureClearance5);
+		wodClearance = settings.GetValue<float>("Compatibility", "WorldOfDaggerfallClearance");
+		woNature = new WOTerrainNature(mod, DREAMModEnabled, WODTerrainModEnabled,  LLModEnabled, rngSeed, dynamicVegetationClearance, vegInLoc: false, fireflies, shootingStars, fireflyActivationDistance, shootingStarsMin, shootingStarsMax, generalNatureClearance, natureClearance1, natureClearance2, natureClearance3, natureClearance4, natureClearance5, wodClearance);
 		woTexturing = new WOTerrainTexturing(WODTerrainModEnabled, BasicRoadsModEnabled);
 		DaggerfallUnity.Instance.TerrainNature = woNature;
 		DaggerfallUnity.Instance.TerrainTexturing = woTexturing;
