@@ -69,7 +69,7 @@ namespace WildernessOverhaul
         // Turn off the normal water tile conversion in DFU, do it in this mod instead.
         public bool ConvertWaterTiles()
         {
-            return false;
+            return true;
         }
 
         public virtual JobHandle ScheduleAssignTilesJob(ITerrainSampler terrainSampler, ref MapPixelData mapData, JobHandle dependencies, bool march = true)
