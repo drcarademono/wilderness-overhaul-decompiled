@@ -286,14 +286,13 @@ namespace WildernessOverhaul
                 float height = heightmapData[JobA.Idx(hy, hx, hDim)] * maxTerrainHeight;
 
                 // Ocean and Beach texture
-                if (height < oceanElevation - 0.001f) {
+                if (height <= oceanElevation) {
                     tileData[index] = water;
                     return;
                 }
 
                 // Adds a little +/- randomness to threshold so beach line isn't too regular
-                // Thinner beach where a rock face is diving down steep into water
-                if (height < beachElevation - 9.0f) { // Constant added for World of Daggerfall ports compatibility
+                if (height <= beachElevation + (JobRand.Next(-100, 100) / 100f)) {
                     tileData[index] = dirt;
                     return;
                 }
@@ -311,12 +310,6 @@ namespace WildernessOverhaul
                 //    tileData[index] = dirt;
                 //    return;
                 //}
-
-                // Adds a little +/- randomness to threshold so beach line isn't too regular
-                if (height <= beachElevation - 9.0f + (JobRand.Next(-100, 100) / 100f)) {
-                    tileData[index] = dirt;
-                    return;
-                }
 
                 // Get latitude and longitude of this tile
                 int latitude = (int)(mapPixelX * MapsFile.WorldMapTileDim + x);
